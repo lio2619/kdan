@@ -10,12 +10,24 @@ using Kdan.Services.Interface;
 
 try
 {
+    var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
     var builder = WebApplication.CreateBuilder(args);
 
     Log.Logger = new LoggerConfiguration()
         .ReadFrom.Configuration(builder.Configuration)
         .CreateLogger();
     builder.Host.UseSerilog();
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+                          policy =>
+                          {
+                              policy.WithOrigins("http://localhost:8888");
+                              policy.AllowAnyHeader();
+                              policy.AllowAnyMethod();
+                          });
+    });
 
     // Add services to the container.
     builder.Services.AddControllers()
@@ -73,6 +85,8 @@ try
     }
 
     app.UseHttpsRedirection();
+
+    app.UseCors(MyAllowSpecificOrigins);
 
     app.UseAuthorization();
 
