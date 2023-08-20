@@ -139,8 +139,15 @@ namespace Kdan.Services
             });
             return kdanInformation;
         }
-        public async Task<List<int>> ListEmployeesNotClockedOutBetweenDatesFunction(KdanDatePara kdanDatePara)
+        /// <summary>
+        /// 列出在這個區間內沒有打下班卡的清單
+        /// </summary>
+        /// <param name="kdanDatePara"></param>
+        /// <returns></returns>
+        /// <exception cref="BadHttpRequestException"></exception>
+        public async Task<KdanEmployeeNumbersDto> ListEmployeesNotClockedOutBetweenDatesFunction(KdanDatePara kdanDatePara)
         {
+            KdanEmployeeNumbersDto kdanEmployeeNumbersDto = new();
             DateOnly startDay = DateOnly.ParseExact(kdanDatePara.StartDay, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             DateOnly endDay = DateOnly.ParseExact(kdanDatePara.EndDay, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             if (startDay >  endDay)
@@ -148,13 +155,21 @@ namespace Kdan.Services
                 throw new BadHttpRequestException("開始日期大於結束日期");
             }
             var response = await _kdanMembersRepository.CheckDayRangeNotClockOutEmployees(startDay, endDay);
-            return response;
+            kdanEmployeeNumbersDto.EmployeeNumber = response;
+            return kdanEmployeeNumbersDto;
         }
-        public async Task<List<int>> ListFiveEmployeesTodayClockInEarliestFunction(KdanDesignatedDayPara kdanDesignatedDayPara)
+        /// <summary>
+        /// 取得今天最早打卡的5位員工的資料
+        /// </summary>
+        /// <param name="kdanDesignatedDayPara"></param>
+        /// <returns></returns>
+        public async Task<KdanEmployeeNumbersDto> ListFiveEmployeesTodayClockInEarliestFunction(KdanDesignatedDayPara kdanDesignatedDayPara)
         {
+            KdanEmployeeNumbersDto kdanEmployeeNumbersDto = new();
             DateOnly firstDate = DateOnly.ParseExact(kdanDesignatedDayPara.Day, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             var response = await _kdanMembersRepository.CheckDayFiveEarliestClockInEmployee(firstDate);
-            return response;
+            kdanEmployeeNumbersDto.EmployeeNumber = response;
+            return kdanEmployeeNumbersDto;
         }
     }
 }

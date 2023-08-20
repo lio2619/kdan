@@ -39,12 +39,12 @@ namespace Kdan.Services.Interface
         /// </summary>
         /// <param name="kdanDatePara"></param>
         /// <returns></returns>
-        public Task<List<int>> ListEmployeesNotClockedOutBetweenDatesFunction(KdanDatePara kdanDatePara);
+        public Task<KdanEmployeeNumbersDto> ListEmployeesNotClockedOutBetweenDatesFunction(KdanDatePara kdanDatePara);
         /// <summary>
         /// 取得今天最早打卡的5位員工的資料
         /// </summary>
-        /// <param name="dateOnly"></param>
+        /// <param name="kdanDesignatedDayPara"></param>
         /// <returns></returns>
-        public Task<List<int>> ListFiveEmployeesTodayClockInEarliestFunction(KdanDesignatedDayPara kdanDesignatedDayPara);
+        public Task<KdanEmployeeNumbersDto> ListFiveEmployeesTodayClockInEarliestFunction(KdanDesignatedDayPara kdanDesignatedDayPara);
     }
 }

@@ -169,7 +169,7 @@ namespace Kdan.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<int>>> ListEmployeesNotClockedOutBetweenDates(KdanDatePara kdanDatePara)
+        public async Task<ActionResult<KdanEmployeeNumbersDto>> ListEmployeesNotClockedOutBetweenDates(KdanDatePara kdanDatePara)
         {
             try
             {
@@ -195,7 +195,7 @@ namespace Kdan.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<int>>> ListFiveEmployeesTodayClockInEarliest(KdanDesignatedDayPara kdanDesignatedDayPara)
+        public async Task<ActionResult<KdanEmployeeNumbersDto>> ListFiveEmployeesTodayClockInEarliest(KdanDesignatedDayPara kdanDesignatedDayPara)
         {
             try
             {

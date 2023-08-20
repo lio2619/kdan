@@ -76,10 +76,15 @@ namespace Kdan.Repositorys
         public async Task<List<int>> CheckDayRangeNotClockOutEmployees(DateOnly startDay, DateOnly endDay)
         {
             var response = await _kdanContext.KdanMembers.Where(x => DateOnly.FromDateTime((DateTime)x.ClockIn) >= startDay &&
-                                                         DateOnly.FromDateTime((DateTime)x.ClockIn) <= startDay &&
+                                                         DateOnly.FromDateTime((DateTime)x.ClockIn) <= endDay &&
                                                          x.ClockOut == null).Select(y => y.EmployeeNumber).ToListAsync();
             return response;
         }
+        /// <summary>
+        /// 列出指定日期內最早打卡的五位員工編號
+        /// </summary>
+        /// <param name="dateOnly"></param>
+        /// <returns></returns>
         public async Task<List<int>> CheckDayFiveEarliestClockInEmployee(DateOnly dateOnly)
         {
             var response = await _kdanContext.KdanMembers.Where(x => DateOnly.FromDateTime((DateTime)x.ClockIn) == dateOnly)

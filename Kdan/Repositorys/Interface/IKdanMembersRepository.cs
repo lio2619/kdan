@@ -36,6 +36,11 @@ namespace Kdan.Repositorys.Interface
         /// <param name="endDay"></param>
         /// <returns></returns>
         public Task<List<int>> CheckDayRangeNotClockOutEmployees(DateOnly startDay, DateOnly endDay);
+        /// <summary>
+        /// 列出指定日期內最早打卡的五位員工編號
+        /// </summary>
+        /// <param name="dateOnly"></param>
+        /// <returns></returns>
         public Task<List<int>> CheckDayFiveEarliestClockInEmployee(DateOnly dateOnly);
     }
 }
