@@ -3,6 +3,7 @@ using Kdan.Repositorys.Interface;
 using Kdan.Services.Interface;
 using Kdan.Parameters;
 using Kdan.Models;
+using Kdan.Dtos;
 
 namespace Kdan.Services
 {
@@ -33,6 +34,7 @@ namespace Kdan.Services
         /// </summary>
         /// <param name="kdanClockPara"></param>
         /// <returns></returns>
+        /// <exception cref="BadHttpRequestException"></exception>
         public async Task ClockInOrOutFunction(KdanClockPara kdanClockPara)
         {
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
@@ -65,6 +67,7 @@ namespace Kdan.Services
         /// </summary>
         /// <param name="kdanClockPara"></param>
         /// <returns></returns>
+        /// <exception cref="BadHttpRequestException"></exception>
         public async Task SupplementaryClockFunction(KdanClockPara kdanClockPara)
         {
             var goToWork = new TimeOnly(8, 00);
@@ -87,8 +90,47 @@ namespace Kdan.Services
                 throw new BadHttpRequestException("已經超出打卡時間");
             }
         }
-        //public async Task ListAllEmployeeTodayInformationFunction()
-        //public async Task ListAllEmployeeDayInformationFunction(DateOnly dateOnly)
+        /// <summary>
+        /// 取得今天所有員工的資料
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<KdanMembersInformationDto>> ListAllEmployeeTodayInformationFunction()
+        {
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            var response = await _kdanMembersRepository.CheckDayEmployeeInformation(today);
+            var kdanInformation = _mapper.Map<List<KdanMembersInformationDto>>(response);
+            kdanInformation.ForEach(x =>
+            {
+                x.BreakTime = TimeOnly.Parse("12:00");
+                if (x.ClockIn == TimeOnly.Parse("00:00") || x.ClockOut == TimeOnly.Parse("00:00"))
+                {
+                    x.TotalWorkingTime = "No Working Time";
+                }
+                else
+                {
+                    x.TotalWorkingTime = (x.ClockOut - x.ClockIn).TotalHours.ToString();
+                }
+            });
+            return kdanInformation;
+        }
+        public async Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(DateOnly dateOnly)
+        {
+            var response = await _kdanMembersRepository.CheckDayEmployeeInformation(dateOnly);
+            var kdanInformation = _mapper.Map<List<KdanMembersInformationDto>>(response);
+            kdanInformation.ForEach(x =>
+            {
+                x.BreakTime = TimeOnly.Parse("12:00");
+                if (x.ClockIn == TimeOnly.Parse("00:00") || x.ClockOut == TimeOnly.Parse("00:00"))
+                {
+                    x.TotalWorkingTime = "No Working Time";
+                }
+                else
+                {
+                    x.TotalWorkingTime = (x.ClockOut - x.ClockIn).TotalHours.ToString();
+                }
+            });
+            return kdanInformation;
+        }
         //public async Task ListEmployeesNotClockedOutBetweenDatesFunction(DateOnly start, DateOnly end)
         //public async Task ListFiveEmployeesTodayClockInEarliestFunction(DateOnly dateOnly)
     }

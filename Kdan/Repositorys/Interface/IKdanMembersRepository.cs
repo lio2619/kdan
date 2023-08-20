@@ -23,5 +23,6 @@ namespace Kdan.Repositorys.Interface
         /// <param name="kdanClockPara"></param>
         /// <returns></returns>
         public Task<KdanMembers> CheckTheCardIsClockOut(KdanClockPara kdanClockPara);
+        public Task<List<KdanMembers>> CheckDayEmployeeInformation(DateOnly dateOnly);
     }
 }

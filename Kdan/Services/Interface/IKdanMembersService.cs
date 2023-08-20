@@ -1,4 +1,5 @@
 ﻿using Kdan.Parameters;
+using Kdan.Dtos;
 
 namespace Kdan.Services.Interface
 {
@@ -26,13 +27,13 @@ namespace Kdan.Services.Interface
         /// 取得今天所有員工的資料
         /// </summary>
         /// <returns></returns>
-        //public Task ListAllEmployeeTodayInformationFunction();
+        public Task<List<KdanMembersInformationDto>> ListAllEmployeeTodayInformationFunction();
         /// <summary>
         /// 取得特定日期所有員工的資料
         /// </summary>
         /// <param name="dateOnly"></param>
         /// <returns></returns>
-        //public Task ListAllEmployeeDayInformationFunction(DateOnly dateOnly);
+        public Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(DateOnly dateOnly);
         /// <summary>
         /// 列出在這個區間內沒有打下班卡的清單
         /// </summary>

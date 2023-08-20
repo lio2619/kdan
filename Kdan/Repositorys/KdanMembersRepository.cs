@@ -55,5 +55,11 @@ namespace Kdan.Repositorys
             }
             return check;
         }
+        public async Task<List<KdanMembers>> CheckDayEmployeeInformation(DateOnly dateOnly)
+        {
+            var information = await _kdanContext.KdanMembers.Where(x => DateOnly.FromDateTime((DateTime)x.ClockIn) == dateOnly ||
+                                                                DateOnly.FromDateTime((DateTime)x.ClockOut) == dateOnly).AsNoTracking().ToListAsync();
+            return information;
+        }
     }
 }
