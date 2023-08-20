@@ -4,6 +4,8 @@ using Kdan.Services.Interface;
 using Kdan.Parameters;
 using Kdan.Models;
 using Kdan.Dtos;
+using System.Globalization;
+using System;
 
 namespace Kdan.Services
 {
@@ -113,9 +115,15 @@ namespace Kdan.Services
             });
             return kdanInformation;
         }
-        public async Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(DateOnly dateOnly)
+        /// <summary>
+        /// 取得指定日期所有員工的資料
+        /// </summary>
+        /// <param name="dateOnly"></param>
+        /// <returns></returns>
+        public async Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(string dateOnly)
         {
-            var response = await _kdanMembersRepository.CheckDayEmployeeInformation(dateOnly);
+            DateOnly firstDate = DateOnly.ParseExact(dateOnly, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            var response = await _kdanMembersRepository.CheckDayEmployeeInformation(firstDate);
             var kdanInformation = _mapper.Map<List<KdanMembersInformationDto>>(response);
             kdanInformation.ForEach(x =>
             {
@@ -131,7 +139,22 @@ namespace Kdan.Services
             });
             return kdanInformation;
         }
-        //public async Task ListEmployeesNotClockedOutBetweenDatesFunction(DateOnly start, DateOnly end)
-        //public async Task ListFiveEmployeesTodayClockInEarliestFunction(DateOnly dateOnly)
+        public async Task<List<int>> ListEmployeesNotClockedOutBetweenDatesFunction(KdanDatePara kdanDatePara)
+        {
+            DateOnly startDay = DateOnly.ParseExact(kdanDatePara.StartDay, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateOnly endDay = DateOnly.ParseExact(kdanDatePara.EndDay, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            if (startDay >  endDay)
+            {
+                throw new BadHttpRequestException("開始日期大於結束日期");
+            }
+            var response = await _kdanMembersRepository.CheckDayRangeNotClockOutEmployees(startDay, endDay);
+            return response;
+        }
+        public async Task<List<int>> ListFiveEmployeesTodayClockInEarliestFunction(string dateOnly)
+        {
+            DateOnly firstDate = DateOnly.ParseExact(dateOnly, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            var response = await _kdanMembersRepository.CheckDayFiveEarliestClockInEmployee(firstDate);
+            return response;
+        }
     }
 }

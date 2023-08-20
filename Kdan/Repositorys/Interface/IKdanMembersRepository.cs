@@ -23,6 +23,19 @@ namespace Kdan.Repositorys.Interface
         /// <param name="kdanClockPara"></param>
         /// <returns></returns>
         public Task<KdanMembers> CheckTheCardIsClockOut(KdanClockPara kdanClockPara);
+        /// <summary>
+        /// 取出指定日期的員工資訊
+        /// </summary>
+        /// <param name="dateOnly"></param>
+        /// <returns></returns>
         public Task<List<KdanMembers>> CheckDayEmployeeInformation(DateOnly dateOnly);
+        /// <summary>
+        /// 取出指定日期區間內未打下班卡的員工
+        /// </summary>
+        /// <param name="startDay"></param>
+        /// <param name="endDay"></param>
+        /// <returns></returns>
+        public Task<List<int>> CheckDayRangeNotClockOutEmployees(DateOnly startDay, DateOnly endDay);
+        public Task<List<int>> CheckDayFiveEarliestClockInEmployee(DateOnly dateOnly);
     }
 }

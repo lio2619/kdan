@@ -66,9 +66,9 @@ namespace Kdan.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-        [HttpPost]
-        [Route("SupplementaryClock")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPut]
+        [Route("Clock")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SupplementaryClock(KdanClockPara kdanClockPara)
@@ -76,7 +76,7 @@ namespace Kdan.Controllers
             try
             {
                 await _kdanMembersService.SupplementaryClockFunction(kdanClockPara);
-                return Ok();
+                return NoContent();
             }
             catch (BadHttpRequestException ex)
             {
@@ -117,10 +117,49 @@ namespace Kdan.Controllers
         {
             try
             {
-                DateOnly firstdate = DateOnly.ParseExact(dateOnly,
-                                         "MM/dd/yyyy",
-                                         CultureInfo.InvariantCulture);
-                var response = await _kdanMembersService.ListAllEmployeeDayInformationFunction(firstdate);
+                var response = await _kdanMembersService.ListAllEmployeeDayInformationFunction(dateOnly);
+                return Ok(response);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("EmployeesNotClockedOutBetweenDates")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<int>>> ListEmployeesNotClockedOutBetweenDates(KdanDatePara kdanDatePara)
+        {
+            try
+            {
+                var response = await _kdanMembersService.ListEmployeesNotClockedOutBetweenDatesFunction(kdanDatePara);
+                return Ok(response);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("EmployeesFiveEarlestClockIn")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<int>>> ListFiveEmployeesTodayClockInEarliest(string dateOnly)
+        {
+            try
+            {
+                var response = await _kdanMembersService.ListFiveEmployeesTodayClockInEarliestFunction(dateOnly);
                 return Ok(response);
             }
             catch (BadHttpRequestException ex)

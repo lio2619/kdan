@@ -3,6 +3,7 @@ using Kdan.Repositorys.Interface;
 using Kdan.Models;
 using Kdan.Context;
 using Kdan.Parameters;
+using System;
 
 namespace Kdan.Repositorys
 {
@@ -55,11 +56,35 @@ namespace Kdan.Repositorys
             }
             return check;
         }
+        /// <summary>
+        /// 取出指定日期的員工資訊
+        /// </summary>
+        /// <param name="dateOnly"></param>
+        /// <returns></returns>
         public async Task<List<KdanMembers>> CheckDayEmployeeInformation(DateOnly dateOnly)
         {
             var information = await _kdanContext.KdanMembers.Where(x => DateOnly.FromDateTime((DateTime)x.ClockIn) == dateOnly ||
                                                                 DateOnly.FromDateTime((DateTime)x.ClockOut) == dateOnly).AsNoTracking().ToListAsync();
             return information;
+        }
+        /// <summary>
+        /// 取出指定日期區間內未打下班卡的員工
+        /// </summary>
+        /// <param name="startDay"></param>
+        /// <param name="endDay"></param>
+        /// <returns></returns>
+        public async Task<List<int>> CheckDayRangeNotClockOutEmployees(DateOnly startDay, DateOnly endDay)
+        {
+            var response = await _kdanContext.KdanMembers.Where(x => DateOnly.FromDateTime((DateTime)x.ClockIn) >= startDay &&
+                                                         DateOnly.FromDateTime((DateTime)x.ClockIn) <= startDay &&
+                                                         x.ClockOut == null).Select(y => y.EmployeeNumber).ToListAsync();
+            return response;
+        }
+        public async Task<List<int>> CheckDayFiveEarliestClockInEmployee(DateOnly dateOnly)
+        {
+            var response = await _kdanContext.KdanMembers.Where(x => DateOnly.FromDateTime((DateTime)x.ClockIn) == dateOnly)
+                                                        .OrderBy(z => z.ClockIn).Select(y => y.EmployeeNumber).Take(5).ToListAsync();
+            return response;
         }
     }
 }
