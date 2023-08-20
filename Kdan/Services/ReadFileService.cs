@@ -6,6 +6,13 @@ namespace Kdan.Services
     public class ReadFileService : IReadFileService
     {
         public ReadFileService() { }
+        /// <summary>
+        /// 讀取json檔到資料庫
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="jsonFilePath"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
         public IEnumerable<T> ReadJsonFile<T>(string jsonFilePath)
         {
             if (File.Exists(jsonFilePath))

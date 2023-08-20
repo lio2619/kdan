@@ -9,7 +9,7 @@
         /// <summary>
         /// 員工編號
         /// </summary>
-        public string EmployeeNumber { get; set; }
+        public int EmployeeNumber { get; set; }
         /// <summary>
         /// 上班打卡時間
         /// </summary>
