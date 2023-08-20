@@ -33,7 +33,7 @@ namespace Kdan.Services.Interface
         /// </summary>
         /// <param name="dateOnly"></param>
         /// <returns></returns>
-        public Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(string dateOnly);
+        public Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(KdanDesignatedDayPara kdanDesignatedDayPara);
         /// <summary>
         /// 列出在這個區間內沒有打下班卡的清單
         /// </summary>
@@ -45,6 +45,6 @@ namespace Kdan.Services.Interface
         /// </summary>
         /// <param name="dateOnly"></param>
         /// <returns></returns>
-        public Task<List<int>> ListFiveEmployeesTodayClockInEarliestFunction(string dateOnly);
+        public Task<List<int>> ListFiveEmployeesTodayClockInEarliestFunction(KdanDesignatedDayPara kdanDesignatedDayPara);
     }
 }

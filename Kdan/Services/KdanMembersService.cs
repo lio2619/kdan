@@ -120,9 +120,9 @@ namespace Kdan.Services
         /// </summary>
         /// <param name="dateOnly"></param>
         /// <returns></returns>
-        public async Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(string dateOnly)
+        public async Task<List<KdanMembersInformationDto>> ListAllEmployeeDayInformationFunction(KdanDesignatedDayPara kdanDesignatedDayPara)
         {
-            DateOnly firstDate = DateOnly.ParseExact(dateOnly, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateOnly firstDate = DateOnly.ParseExact(kdanDesignatedDayPara.Day, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             var response = await _kdanMembersRepository.CheckDayEmployeeInformation(firstDate);
             var kdanInformation = _mapper.Map<List<KdanMembersInformationDto>>(response);
             kdanInformation.ForEach(x =>
@@ -150,9 +150,9 @@ namespace Kdan.Services
             var response = await _kdanMembersRepository.CheckDayRangeNotClockOutEmployees(startDay, endDay);
             return response;
         }
-        public async Task<List<int>> ListFiveEmployeesTodayClockInEarliestFunction(string dateOnly)
+        public async Task<List<int>> ListFiveEmployeesTodayClockInEarliestFunction(KdanDesignatedDayPara kdanDesignatedDayPara)
         {
-            DateOnly firstDate = DateOnly.ParseExact(dateOnly, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateOnly firstDate = DateOnly.ParseExact(kdanDesignatedDayPara.Day, "MM/dd/yyyy", CultureInfo.InvariantCulture);
             var response = await _kdanMembersRepository.CheckDayFiveEarliestClockInEmployee(firstDate);
             return response;
         }
