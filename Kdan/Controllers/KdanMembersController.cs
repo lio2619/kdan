@@ -34,9 +34,16 @@ namespace Kdan.Controllers
                 }
                 foreach (var formFile in formFiles)
                 {
+                    if (Path.GetExtension(formFile.FileName) != ".json")
+                    {
+                        throw new BadHttpRequestException("副檔名不符");
+                    }
                     var filePath = Path.GetFullPath(formFile.FileName);
-                    var path = Path.GetDirectoryName(formFile.FileName);
-                    await _kdanMembersService.JsonFileToDBFunction("C:\\Users\\lio26\\Downloads\\member.json");
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        formFile.CopyTo(stream);
+                    }
+                    await _kdanMembersService.JsonFileToDBFunction(filePath);
                 }
                 return Ok();
             }
